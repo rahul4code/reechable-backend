@@ -6,8 +6,6 @@ const io = new Server({
   },
 });
 
-const activeRoom = new Set();
-
 io.on("connection", (socket: Socket) => {
   socket.emit("when-connected", "Socket is Online");
 
@@ -18,11 +16,11 @@ io.on("connection", (socket: Socket) => {
 
   console.log(socket?.rooms, "Total Rooms");
 
-  socket.on("send-chat-message", ({ message, roomId }) => {
+  socket.on("send-chat-message", ({ message, name, roomId }) => {
     console.log(message, roomId, "getting Message");
     socket
       .to(roomId)
-      .emit("receive-message", { room: roomId, message: message });
+      .emit("receive-message", { room: roomId, name: name, message: message });
   });
 
   socket.on("send-broadcast-message", (message) => {
